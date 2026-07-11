@@ -18,9 +18,9 @@ describe('stackOffset', () => {
     expect(stackOffset(0)).toEqual({ x: 0, y: 0 });
   });
 
-  it('offsets 14px diagonally per card behind the front', () => {
-    expect(stackOffset(1)).toEqual({ x: 14, y: 14 });
-    expect(stackOffset(2)).toEqual({ x: 28, y: 28 });
+  it('offsets 14px diagonally toward the top-right per card behind the front', () => {
+    expect(stackOffset(1)).toEqual({ x: 14, y: -14 });
+    expect(stackOffset(2)).toEqual({ x: 28, y: -28 });
   });
 });
 

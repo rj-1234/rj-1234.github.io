@@ -7,7 +7,7 @@ export function cycleToBack(order: string[]): string[] {
 }
 
 export function stackOffset(indexFromTop: number): { x: number; y: number } {
-  return { x: indexFromTop * 14, y: indexFromTop * 14 };
+  return { x: indexFromTop * 14, y: indexFromTop === 0 ? 0 : -(indexFromTop * 14) };
 }
 
 export function shouldStopAutoFlip(snippet: { runLabel: string }): boolean {

@@ -9,7 +9,7 @@ export default function ProjectCard({ project }: { project: Project }) {
   const view = useStore(viewStore);
 
   return (
-    <div className="rounded-lg border border-hairline bg-surface-0 p-6">
+    <div className="card-pop rounded-lg border border-hairline bg-surface-0 p-6">
       <div className="flex flex-wrap gap-2">
         {project.domains.map((d) => (
           <span key={d} className="text-caption-uppercase rounded-pill bg-surface-1 px-3 py-1">{d}</span>

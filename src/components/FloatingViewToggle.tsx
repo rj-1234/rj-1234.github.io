@@ -4,8 +4,9 @@ import { useStore } from '@nanostores/react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { viewStore, toggleView } from '../lib/store';
 
-const EXECUTIVE_CAT_URL = 'https://lottie.host/58d96d9b-94ca-4503-8922-08592d82d30f/L0toD2hoxg.lottie';
-const TECHNICAL_CAT_URL = 'https://lottie.host/b4f060c0-c0d0-4ba5-9ea5-c48b0b90f09d/V7t826i9my.lottie';
+// const EXECUTIVE_CAT_URL = '/assets/animations/Cat%20in%20a%20rocket.lottie';
+const EXECUTIVE_CAT_URL = '/assets/animations/Dance%20cat.lottie';
+const TECHNICAL_CAT_URL = '/assets/animations/Cat%20typing.lottie';
 
 export default function FloatingViewToggle() {
   const view = useStore(viewStore);
@@ -31,8 +32,14 @@ export default function FloatingViewToggle() {
       }}
       className="fixed bottom-6 right-6 z-[60] w-20 h-20 rounded-full bg-surface-1 shadow-lg flex flex-col items-center justify-center cursor-pointer select-none"
     >
-      <DotLottieReact src={view === 'executive' ? EXECUTIVE_CAT_URL : TECHNICAL_CAT_URL} autoplay loop style={{ width: 48, height: 48 }} />
-      <span className="text-caption-uppercase">{view === 'executive' ? 'Exec' : 'Tech'}</span>
+      <DotLottieReact
+        src={view === 'executive' ? EXECUTIVE_CAT_URL : TECHNICAL_CAT_URL}
+        autoplay
+        loop
+        speed={view === 'technical' ? 2.5 : 1}
+        style={{ width: 48, height: 48 }}
+      />
+      {/* <span className="text-caption-uppercase">{view === 'executive' ? 'Exec' : 'Tech'}</span> */}
       {!hasInteracted && <span className="absolute -top-6 text-caption text-muted whitespace-nowrap">click me · drag me</span>}
     </motion.div>
   );

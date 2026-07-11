@@ -148,10 +148,15 @@ export default function HeroTerminal() {
                 </pre>
 
                 {snippet.runLabel && (
-                  <button onClick={(e) => runSnippet(e, id)} className="mt-3 flex items-center gap-2 text-caption text-primary">
-                    {runState === 'idle' && <span>▶ {snippet.runLabel}</span>}
-                    {runState === 'running' && <span>◌ Running…</span>}
-                    {runState === 'complete' && <span>✓ Completed in {snippet.output.latencyMs}ms</span>}
+                  <button
+                    onClick={(e) => runSnippet(e, id)}
+                    aria-label={runState === 'idle' ? snippet.runLabel : runState === 'running' ? 'Running' : `Completed in ${snippet.output.latencyMs}ms`}
+                    title={runState === 'idle' ? snippet.runLabel : runState === 'running' ? 'Running…' : `Completed in ${snippet.output.latencyMs}ms`}
+                    className="mt-3 w-9 h-9 rounded-full bg-surface-dark-elevated text-primary flex items-center justify-center"
+                  >
+                    {runState === 'idle' && <span>▶</span>}
+                    {runState === 'running' && <span className="animate-spin">◌</span>}
+                    {runState === 'complete' && <span>✓</span>}
                   </button>
                 )}
 
