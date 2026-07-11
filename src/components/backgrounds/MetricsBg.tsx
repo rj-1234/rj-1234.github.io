@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useStore } from '@nanostores/react';
-import { loadClouds } from '../../lib/vanta-loader';
+import { loadClouds2 } from '../../lib/vanta-loader';
 import { viewStore } from '../../lib/store';
 
 export default function MetricsBg() {
@@ -12,15 +12,17 @@ export default function MetricsBg() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let cancelled = false;
 
-    loadClouds().then((CLOUDS) => {
+    loadClouds2().then((CLOUDS2) => {
       if (cancelled || !ref.current) return;
-      effectRef.current = CLOUDS({
+      effectRef.current = CLOUDS2({
         el: ref.current,
         backgroundColor: 0xefe9de,
+        backgroundAlpha: 1,
+        skyColor: 0xefe9de,
         cloudColor: 0xcc785c,
-        sunColor: 0xe8a55a,
-        sunGlareColor: 0xe8a55a,
-        sunlightColor: 0xe8a55a,
+        lightColor: 0xe8a55a,
+        speed: 1,
+        texturePath: '/assets/noise.png',
       });
     });
 
@@ -37,5 +39,14 @@ export default function MetricsBg() {
     return () => timers.forEach(clearTimeout);
   }, [view]);
 
-  return <div ref={ref} className="absolute inset-0 pointer-events-none z-0 opacity-40" />;
+  return (
+    <div
+      ref={ref}
+      className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none z-0 opacity-40"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 25%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 25%)',
+      }}
+    />
+  );
 }

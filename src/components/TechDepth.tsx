@@ -15,36 +15,36 @@ export default function TechDepth() {
         <h2 className="font-display text-display-lg">Technical Depth</h2>
         <p className="text-body-md text-body mt-2">Full-stack ML engineering from model development through production serving and governance.</p>
 
-        <div className={`grid gap-10 mt-8 ${view === 'technical' ? 'lg:grid-cols-2' : ''}`}>
-          <div className="space-y-6">
-            {SKILLS.map((cat) => (
-              <div key={cat.name}>
-                <button
-                  onClick={() => setActive(active === cat.name ? null : cat.name)}
-                  className={`text-title-sm ${active === cat.name ? 'text-primary' : 'text-ink'}`}
-                >
-                  {cat.name}
-                </button>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {cat.skills.map((s) => (
-                    <span
-                      key={s}
-                      className={`text-caption rounded-pill px-3 py-1 ${active === cat.name ? 'bg-primary text-on-primary' : 'bg-surface-0 text-body'}`}
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
+        <div className="grid gap-10 mt-8 lg:grid-cols-2">
+          <div className="space-y-4">
+            {PROJECTS.map((p) => (
+              <div key={p.id} className="card-pop glass rounded-lg p-5">
+                <h4 className="text-title-sm">{p.title}</h4>
+                <p className="text-code text-muted mt-1">{p.architecture}</p>
               </div>
             ))}
           </div>
 
           {view === 'technical' && (
-            <div className="space-y-4">
-              {PROJECTS.map((p) => (
-                <div key={p.id} className="card-pop glass rounded-lg p-5">
-                  <h4 className="text-title-sm">{p.title}</h4>
-                  <p className="text-code text-muted mt-1">{p.architecture}</p>
+            <div className="space-y-6 hidden lg:block">
+              {SKILLS.map((cat) => (
+                <div key={cat.name}>
+                  <button
+                    onClick={() => setActive(active === cat.name ? null : cat.name)}
+                    className={`text-title-sm ${active === cat.name ? 'text-primary' : 'text-ink'}`}
+                  >
+                    {cat.name}
+                  </button>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {cat.skills.map((s) => (
+                      <span
+                        key={s}
+                        className={`text-caption rounded-pill px-3 py-1 backdrop-blur-md ${active === cat.name ? 'bg-primary/80 text-on-primary' : 'bg-surface-0/55 text-body'}`}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
