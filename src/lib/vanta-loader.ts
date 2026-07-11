@@ -31,6 +31,12 @@ export async function loadClouds() {
   return window.VANTA.CLOUDS;
 }
 
+export async function loadClouds2() {
+  ensureThree();
+  await import('vanta/dist/vanta.clouds2.min');
+  return window.VANTA.CLOUDS2;
+}
+
 export async function loadDots() {
   ensureThree();
   await import('vanta/dist/vanta.dots.min');

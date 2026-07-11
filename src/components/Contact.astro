@@ -1,9 +1,13 @@
-<section id="contact" class="section-padding bg-canvas">
-  <div class="container-main text-center">
+---
+import ContactBg from './backgrounds/ContactBg';
+---
+<section id="contact" class="relative section-padding bg-canvas overflow-hidden">
+  <ContactBg client:visible />
+  <div class="container-main relative z-10 text-center pointer-events-none">
     <h2 class="font-display text-display-lg">Let's build something significant.</h2>
-    <p class="text-body-md text-muted mt-3">Open to principal/staff engineering roles, AI infrastructure consulting, and research collaboration.</p>
-    <p class="text-body-sm text-muted mt-1">Malvern, PA · Open to remote</p>
-    <div class="flex justify-center gap-3 mt-8">
+    <p class="text-body-md text-muted mt-3">Open to principal/staff engineering roles, and research collaboration.</p>
+    <p class="text-body-sm text-muted mt-1">Philadelphia, PA</p>
+    <div class="flex justify-center gap-3 mt-8 pointer-events-auto">
       <a href="https://linkedin.com/in/rj1234" class="rounded-md bg-primary text-on-primary px-5 py-3 text-body-md">LinkedIn</a>
       <a href="https://github.com/rj-1234" class="rounded-md border border-hairline px-5 py-3 text-body-md">GitHub</a>
       <a href="/assets/Rajeev_Joshi_Resume.pdf" class="rounded-md border border-hairline px-5 py-3 text-body-md">Resume</a>

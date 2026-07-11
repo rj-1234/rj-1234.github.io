@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'motion/react';
 import { TERMINAL_SNIPPETS } from '../lib/constants';
-import { getInitialOrder, cycleToBack, stackOffset, shouldStopAutoFlip, clampScale } from '../lib/hero-terminal-logic';
+import { getInitialOrder, cycleToBack, shouldStopAutoFlip, clampScale } from '../lib/hero-terminal-logic';
 import { highlightLine } from '../lib/syntax-highlight';
 
 type RunState = 'idle' | 'running' | 'complete';
@@ -99,6 +99,9 @@ export default function HeroTerminal() {
     runTimersRef.current.push(completeTimer);
   };
 
+  const frontId = order[order.length - 1];
+  const snippet = TERMINAL_SNIPPETS.find((s) => s.id === frontId)!;
+
   return (
     <motion.div
       drag
@@ -110,101 +113,109 @@ export default function HeroTerminal() {
         setIsDragging(false);
         dragScale.set(1);
       }}
-      className="relative w-full max-w-lg aspect-[4/3]"
+      className="relative w-full max-w-sm"
     >
-      {order.map((id, i) => {
-        const snippet = TERMINAL_SNIPPETS.find((s) => s.id === id)!;
-        const indexFromTop = order.length - 1 - i;
-        const isActive = indexFromTop === 0;
-        const offset = stackOffset(indexFromTop);
+      <div className="relative">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={frontId}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          onClick={cycle}
+          className="relative w-full rounded-lg overflow-hidden shadow-lg cursor-pointer bg-surface-dark text-on-dark"
+        >
+          <div className="h-11 flex items-center gap-2 px-4 bg-surface-1 shadow-sm">
+            <span className="w-3 h-3 rounded-full bg-error" />
+            <span className="w-3 h-3 rounded-full bg-warning" />
+            <span className="w-3 h-3 rounded-full bg-success" />
+            <span className="text-code text-ink ml-2">{snippet.filename}</span>
+            <span className="ml-auto flex items-center gap-1.5" title="Connected">
+              <span className="w-1.5 h-1.5 rounded-full bg-accent-teal" />
+              <span className="text-caption text-muted">Connected</span>
+            </span>
+          </div>
 
-        return (
-          <div
-            key={id}
-            onClick={cycle}
-            className="absolute inset-0 rounded-lg overflow-hidden shadow-lg cursor-pointer bg-surface-dark text-on-dark"
-            style={{
-              transform: `translate(${offset.x}px, ${offset.y}px)`,
-              zIndex: i,
-            }}
-          >
-            <div className="h-11 flex items-center gap-2 px-4 bg-surface-dark-elevated">
-              <span className="w-3 h-3 rounded-full bg-error/70" />
-              <span className="w-3 h-3 rounded-full bg-warning/70" />
-              <span className="w-3 h-3 rounded-full bg-success/70" />
-              <span className="text-code text-on-dark-soft ml-2">{snippet.filename}</span>
-            </div>
-
-            {isActive && (
-              <div className="p-4 text-code overflow-auto h-[calc(100%-44px)]">
-                <pre className="whitespace-pre-wrap">
-                  {snippet.code.map((line, li) => (
-                    <div key={li}>
-                      {highlightLine(line).map((tok, ti) => (
-                        <span key={ti} className={tok.className}>{tok.text}</span>
-                      ))}
-                    </div>
+          <div className="p-6 text-code">
+            <pre className="whitespace-pre-wrap">
+              {snippet.code.map((line, li) => (
+                <div key={li}>
+                  {highlightLine(line).map((tok, ti) => (
+                    <span key={ti} className={tok.className}>{tok.text}</span>
                   ))}
-                </pre>
+                </div>
+              ))}
+            </pre>
 
-                {snippet.runLabel && (
-                  <button
-                    onClick={(e) => runSnippet(e, id)}
-                    aria-label={runState === 'idle' ? snippet.runLabel : runState === 'running' ? 'Running' : `Completed in ${snippet.output.latencyMs}ms`}
-                    title={runState === 'idle' ? snippet.runLabel : runState === 'running' ? 'Running…' : `Completed in ${snippet.output.latencyMs}ms`}
-                    className="mt-3 w-9 h-9 rounded-full bg-surface-dark-elevated text-primary flex items-center justify-center"
-                  >
-                    {runState === 'idle' && <span>▶</span>}
-                    {runState === 'running' && <span className="animate-spin">◌</span>}
-                    {runState === 'complete' && <span>✓</span>}
-                  </button>
-                )}
-
-                {runState !== 'idle' && (
-                  <div className="mt-2 text-code space-y-1">
-                    {snippet.output.lines.slice(0, visibleLines).map((line, li) => (
-                      <div key={li} className={{
-                        info: 'text-on-dark-soft',
-                        success: 'text-success',
-                        warning: 'text-warning',
-                        error: 'text-error',
-                        muted: 'text-on-dark-soft/70',
-                      }[line.type]}>{line.text}</div>
-                    ))}
-                  </div>
-                )}
+            {runState !== 'idle' && (
+              <div className="mt-2 text-code space-y-1">
+                {snippet.output.lines.slice(0, visibleLines).map((line, li) => (
+                  <div key={li} className={{
+                    info: 'text-on-dark-soft',
+                    success: 'text-success',
+                    warning: 'text-warning',
+                    error: 'text-error',
+                    muted: 'text-on-dark-soft/70',
+                  }[line.type]}>{line.text}</div>
+                ))}
               </div>
             )}
 
-            {isActive && (
-              <svg
-                className="absolute bottom-2 right-2 w-10 h-10"
-                style={{ pointerEvents: 'none' }}
-                onPointerDown={(e) => {
-                  e.stopPropagation();
-                  const startY = e.clientY;
-                  const onMove = (ev: PointerEvent) => handleResizeDrag(ev.clientY - startY);
-                  const onUp = () => {
-                    stopResize();
-                    window.removeEventListener('pointermove', onMove);
-                    window.removeEventListener('pointerup', onUp);
-                  };
-                  window.addEventListener('pointermove', onMove);
-                  window.addEventListener('pointerup', onUp);
-                }}
-              >
-                <path
-                  d="M 40 16 L 40 30 Q 40 40 30 40 L 16 40"
-                  stroke="#cc785c"
-                  strokeWidth="5"
-                  fill="none"
-                  style={{ pointerEvents: 'stroke' }}
-                />
-              </svg>
+            {snippet.runLabel && (
+              <div className="mt-3 flex justify-end">
+                <button
+                  onClick={(e) => runSnippet(e, frontId)}
+                  aria-label={runState === 'idle' ? snippet.runLabel : runState === 'running' ? 'Running' : `Completed in ${snippet.output.latencyMs}ms`}
+                  title={runState === 'idle' ? snippet.runLabel : runState === 'running' ? 'Running…' : `Completed in ${snippet.output.latencyMs}ms`}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center ${runState === 'complete' ? 'bg-success text-on-dark' : 'bg-primary text-on-primary'}`}
+                >
+                  {runState === 'idle' && <span>▶</span>}
+                  {runState === 'running' && <span className="animate-spin">◌</span>}
+                  {runState === 'complete' && <span>✓</span>}
+                </button>
+              </div>
             )}
           </div>
-        );
-      })}
+        </motion.div>
+      </AnimatePresence>
+
+      <svg
+        className="absolute w-5 h-5 cursor-nwse-resize z-10 opacity-90"
+        style={{ bottom: '-3px', right: '-3px' }}
+        viewBox="0 0 28 28"
+        onPointerDown={(e) => {
+          e.stopPropagation();
+          const startY = e.clientY;
+          const onMove = (ev: PointerEvent) => handleResizeDrag(ev.clientY - startY);
+          const onUp = () => {
+            stopResize();
+            window.removeEventListener('pointermove', onMove);
+            window.removeEventListener('pointerup', onUp);
+          };
+          window.addEventListener('pointermove', onMove);
+          window.addEventListener('pointerup', onUp);
+        }}
+      >
+        <path
+          d="M 24 4 L 24 16 Q 24 24 16 24 L 4 24"
+          stroke="#cc785c"
+          strokeWidth="9"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      </svg>
+      </div>
+
+      <div className="flex justify-center gap-1.5 mt-3">
+        {TERMINAL_SNIPPETS.map((s) => (
+          <span
+            key={s.id}
+            className={`w-1.5 h-1.5 rounded-full ${s.id === frontId ? 'bg-primary' : 'bg-body/30'}`}
+          />
+        ))}
+      </div>
     </motion.div>
   );
 }

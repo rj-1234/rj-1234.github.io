@@ -35,9 +35,9 @@ export default function ViewToggleHint() {
           exit={{ opacity: 0, y: 8 }}
           onClick={dismiss}
           className="fixed z-[60] glass rounded-lg px-4 py-2 text-body-sm cursor-pointer"
-          style={{ bottom: '70px', right: '24px' }}
+          style={{ top: '176px', right: '24px' }}
         >
-          Toggle executive / technical view ↓
+          Toggle executive / technical view ↑
         </motion.div>
       )}
     </AnimatePresence>

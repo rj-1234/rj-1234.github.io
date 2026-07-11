@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'motion/react';
 import { useStore } from '@nanostores/react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
@@ -14,33 +14,39 @@ export default function FloatingViewToggle() {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-12, 12]);
-
-  const dragConstraints =
-    typeof window === 'undefined'
-      ? { top: 0, bottom: 0, left: 0, right: 0 }
-      : { top: -window.innerHeight, bottom: window.innerHeight, left: -window.innerWidth, right: window.innerWidth };
+  const constraintsRef = useRef<HTMLDivElement>(null);
 
   return (
-    <motion.div
-      drag
-      dragMomentum={false}
-      dragConstraints={dragConstraints}
-      style={{ x, y, rotate }}
-      onClick={() => {
-        setHasInteracted(true);
-        toggleView();
-      }}
-      className="fixed bottom-6 right-6 z-[60] w-20 h-20 rounded-full bg-surface-1 shadow-lg flex flex-col items-center justify-center cursor-pointer select-none"
-    >
-      <DotLottieReact
-        src={view === 'executive' ? EXECUTIVE_CAT_URL : TECHNICAL_CAT_URL}
-        autoplay
-        loop
-        speed={view === 'technical' ? 2.5 : 1}
-        style={{ width: 48, height: 48 }}
-      />
-      {/* <span className="text-caption-uppercase">{view === 'executive' ? 'Exec' : 'Tech'}</span> */}
-      {!hasInteracted && <span className="absolute -top-6 text-caption text-muted whitespace-nowrap">click me · drag me</span>}
-    </motion.div>
+    <>
+      <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-59" />
+      <motion.div
+        drag
+        dragMomentum
+        dragTransition={{ power: 0.4, timeConstant: 200, bounceStiffness: 400, bounceDamping: 12 }}
+        dragElastic={0.5}
+        dragConstraints={constraintsRef}
+        style={{ x, y, rotate }}
+        onClick={() => {
+          setHasInteracted(true);
+          toggleView();
+        }}
+        className="fixed top-20 right-6 z-60 w-20 h-20 rounded-full bg-surface-1 shadow-lg flex flex-col items-center justify-center cursor-pointer select-none"
+      >
+        <motion.div
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+        >
+          <DotLottieReact
+            src={view === 'executive' ? EXECUTIVE_CAT_URL : TECHNICAL_CAT_URL}
+            autoplay
+            loop
+            speed={view === 'technical' ? 2.5 : 1}
+            style={{ width: 48, height: 48 }}
+          />
+        </motion.div>
+        {/* <span className="text-caption-uppercase">{view === 'executive' ? 'Exec' : 'Tech'}</span> */}
+        {!hasInteracted && <span className="absolute -bottom-6 text-caption text-muted whitespace-nowrap">click me · drag me</span>}
+      </motion.div>
+    </>
   );
 }
