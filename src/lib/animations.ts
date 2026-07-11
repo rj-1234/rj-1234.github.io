@@ -18,10 +18,10 @@ export function createSectionSlides(): void {
     const inner = panel.querySelector<HTMLElement>('[data-slide-inner]');
     if (!inner) return;
 
-    const isTaller = inner.getBoundingClientRect().height > window.innerHeight;
-    if (isTaller) {
-      panel.style.marginBottom = `${inner.getBoundingClientRect().height - window.innerHeight}px`;
-    }
+    // Sections taller than one viewport can't be pinned+faded without either
+    // clipping content or opening a blank gap during the transition — let
+    // them scroll normally instead, same as the excluded last section.
+    if (inner.getBoundingClientRect().height > window.innerHeight) return;
 
     const fakeScroll = { y: 0 };
     gsap.timeline({

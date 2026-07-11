@@ -45,7 +45,7 @@ function AnimatedMetric({ metric }: { metric: Metric }) {
   }[metric.size];
 
   return (
-    <div ref={ref} className={`card-pop bg-surface-0 rounded-lg p-6 ${sizeClass}`}>
+    <div ref={ref} className={`card-pop glass rounded-lg p-6 ${sizeClass}`}>
       <div className="font-display">{display}{metric.suffix}</div>
       <div className="text-title-sm mt-2">{metric.label}</div>
       <div className="text-body-sm text-muted mt-1">{metric.sublabel}</div>

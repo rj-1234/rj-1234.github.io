@@ -42,7 +42,7 @@ export default function TechDepth() {
           {view === 'technical' && (
             <div className="space-y-4">
               {PROJECTS.map((p) => (
-                <div key={p.id} className="card-pop rounded-lg bg-surface-0 p-5">
+                <div key={p.id} className="card-pop glass rounded-lg p-5">
                   <h4 className="text-title-sm">{p.title}</h4>
                   <p className="text-code text-muted mt-1">{p.architecture}</p>
                 </div>
