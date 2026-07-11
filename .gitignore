@@ -2,6 +2,13 @@
 content_data/
 build_instructions/
 
+# Internal build/spec docs (working reference only, not for public repo)
+AGENTS.md
+CONTENT_DATA.md
+BUILD_INSTRUCTIONS.md
+DESIGN.md
+docs/
+
 # Astro / Node
 node_modules/
 dist/
@@ -9,3 +16,13 @@ dist/
 .env
 .env.*
 npm-debug.log*
+build.log
+astro-check.log
+.gitignore
+
+# Editor / AI-agent config directories
+.clinerules/
+.cursor/
+.opencode/
+.windsurf/
+.github/copilot-instructions.md
