@@ -1,0 +1,48 @@
+name: Take Down Site (Maintenance Mode)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  undeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create maintenance placeholder
+        run: |
+          mkdir -p dist
+          cat > dist/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8" />
+            <title>Site Unavailable</title>
+            <meta name="robots" content="noindex" />
+            <style>
+              body { font-family: system-ui, sans-serif; background: #181715; color: #faf9f5; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+              h1 { font-weight: 400; }
+            </style>
+          </head>
+          <body>
+            <div>
+              <h1>Site temporarily unavailable</h1>
+              <p>Check back soon.</p>
+            </div>
+          </body>
+          </html>
+          HTML
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

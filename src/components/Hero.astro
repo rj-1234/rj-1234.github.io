@@ -1,0 +1,23 @@
+---
+import HeroBg from './backgrounds/HeroBg';
+import HeroTerminal from './HeroTerminal';
+---
+<section id="hero" data-slide class="relative section-padding overflow-hidden bg-canvas">
+  <HeroBg client:visible />
+  <div data-slide-inner class="container-main relative z-10 grid lg:grid-cols-[1fr_1fr] gap-12 items-center">
+    <div>
+      <span class="inline-flex items-center gap-2 rounded-pill border border-hairline px-4 py-1.5 text-caption">
+        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+        Principal ML Engineer · Vanguard
+      </span>
+      <h1 class="font-display text-display-xl mt-6">Rajeev Joshi</h1>
+      <p class="text-title-md text-body mt-4">Building AI infrastructure that operates at enterprise scale.</p>
+      <p class="text-body-sm text-muted mt-3">6+ years shipping production ML systems — 6B+ API calls/year, 99.9% uptime, 3M+ requests/day.</p>
+      <div class="flex gap-3 mt-8">
+        <a href="#contact" class="inline-flex items-center rounded-md bg-primary text-on-primary px-5 py-3 text-body-md">Get in touch</a>
+        <a href="#projects" class="inline-flex items-center rounded-md border border-hairline px-5 py-3 text-body-md">View projects</a>
+      </div>
+    </div>
+    <HeroTerminal client:load />
+  </div>
+</section>

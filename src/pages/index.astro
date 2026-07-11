@@ -1,0 +1,19 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import MetricsDashboard from '../components/MetricsDashboard';
+import ProjectsGrid from '../components/ProjectsGrid';
+import TechDepth from '../components/TechDepth';
+import Timeline from '../components/Timeline.astro';
+import Publications from '../components/Publications.astro';
+import Contact from '../components/Contact.astro';
+---
+<Layout title="Rajeev Joshi — Principal ML Engineer">
+  <Hero />
+  <MetricsDashboard client:visible />
+  <ProjectsGrid client:visible />
+  <TechDepth client:visible />
+  <Timeline />
+  <Publications />
+  <Contact />
+</Layout>

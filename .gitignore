@@ -1,0 +1,11 @@
+# Raw spec screenshots (personal photos of laptop/desk — not for public repo)
+content_data/
+build_instructions/
+
+# Astro / Node
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+npm-debug.log*
